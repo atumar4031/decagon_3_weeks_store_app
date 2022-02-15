@@ -8,14 +8,17 @@ public class Product {
     private Category category;
     private int quantity;
 
+    private double price;
+
     public Product() {
     }
 
-    public Product(int productId, String name, Category category) {
+    public Product(int productId, String name, double price, Category category) {
         this.productId = productId;
         this.name = name;
         this.category = category;
         this.quantity = quantity;
+        this.price = price;
     }
 
     public int getProductId() {
@@ -39,7 +42,13 @@ public class Product {
         else
             throw new EmptyInputException("Invalid input");
     }
+    public double getPrice() {
+        return price;
+    }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
     public Category getCategory() {
         return category;
     }

@@ -1,6 +1,6 @@
 package org.atumar4031.manager;
 
-import org.atumar4031.ElectronicsStore;
+import org.atumar4031.PhoneAndAccessoriesStore;
 import org.atumar4031.constants.Gender;
 import org.atumar4031.exceptions.CashierNotFoundException;
 import org.atumar4031.utilities.Applicant;
@@ -20,13 +20,13 @@ public class ManagerServicesTest {
     private List<Applicant> applicantList;
     private Applicant applicant1;
     private Applicant applicant2;
-    ElectronicsStore store;
+    PhoneAndAccessoriesStore store;
     LocalDateTime t;
     @Before
     public void setUp() throws Exception {
         t = LocalDateTime.now();
         manager = new Manager();
-        store = new ElectronicsStore();
+        store = new PhoneAndAccessoriesStore();
         managerService = new ManagerService();
         applicantList = new ArrayList<>();
         applicant1 = new Applicant("Umar","umar@gmail.com",

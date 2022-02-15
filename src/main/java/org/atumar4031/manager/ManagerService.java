@@ -1,6 +1,6 @@
 package org.atumar4031.manager;
 
-import org.atumar4031.ElectronicsStore;
+import org.atumar4031.PhoneAndAccessoriesStore;
 import org.atumar4031.cashier.Cashier;
 import org.atumar4031.constants.Role;
 import org.atumar4031.exceptions.CashierNotFoundException;
@@ -35,7 +35,7 @@ public class ManagerService implements iManagerService {
     }
 //List<Cashier>
     @Override
-    public  void hireCashie(List<Applicant> applicants,ElectronicsStore store, int vacancies) {
+    public  void hireCashie(List<Applicant> applicants, PhoneAndAccessoriesStore store, int vacancies) {
         this.vacancies = vacancies;
         for (Applicant applicant : applicants) {
             if (this.vacancies > 0) {

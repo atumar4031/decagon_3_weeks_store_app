@@ -1,6 +1,5 @@
 package org.atumar4031.utilities;
 
-import org.atumar4031.ElectronicsStore;
 import org.atumar4031.cashier.Cashier;
 import org.atumar4031.constants.Gender;
 import org.atumar4031.constants.Role;

@@ -1,7 +1,6 @@
 package org.atumar4031;
 
 import org.atumar4031.cashier.Cashier;
-import org.atumar4031.utilities.Applicant;
 import org.atumar4031.utilities.Receipt;
 import org.atumar4031.product.Product;
 
@@ -10,17 +9,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ElectronicsStore {
+public class PhoneAndAccessoriesStore {
     private Map<Product,Integer> products;
     private List<Receipt> receipts;
     private List<Product> featureProducts;
     private List<Cashier> cashierList;
+    private double storeAccount = 0.00;
 
-    public ElectronicsStore() {
+    public PhoneAndAccessoriesStore() {
         this.products = new HashMap<>();
         this.receipts = new ArrayList<>();
         this.featureProducts = new ArrayList<>();
         this.cashierList = new ArrayList<>();
+    }
+
+    public double getStoreAccount() {
+        return storeAccount;
+    }
+
+    public void setStoreAccount(double storeAccount) {
+        this.storeAccount = storeAccount;
     }
 
     public List<Cashier> getCashierList() {

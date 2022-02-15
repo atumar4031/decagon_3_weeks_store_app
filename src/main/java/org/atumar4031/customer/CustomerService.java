@@ -18,13 +18,14 @@ public class CustomerService implements iCustomerService {
                     if(key.equals(product)){
                         int value = singleEntry.getValue();
                         cart.remove(key);
-                        cart.put(key, value + quantityToBuy);
+                        customer.setCart(key, value + quantityToBuy);
                         break;
                     }
                 }
             }
+        }else {
+            customer.setCart(product, quantityToBuy);
         }
-        customer.setCart(product, quantityToBuy);
         return customer.getCart();
     }
 }

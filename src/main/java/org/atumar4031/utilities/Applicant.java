@@ -1,12 +1,9 @@
 package org.atumar4031.utilities;
 
-import org.atumar4031.ElectronicsStore;
 import org.atumar4031.constants.Gender;
 import org.atumar4031.exceptions.InvalidEmailException;
 import org.atumar4031.exceptions.NullApplicantException;
 import org.atumar4031.manager.Manager;
-
-import java.time.LocalDateTime;
 
 public class Applicant extends User{
 

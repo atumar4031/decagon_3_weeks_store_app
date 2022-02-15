@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class CashierService implements  iCashierService{
-    public CashierService(){
+    PhoneAndAccessoriesStore store;
+    public CashierService(PhoneAndAccessoriesStore store){
+        this.store = store;
     }
     @Override
-    public Map<Product, Integer> addProductToStore(Product product, int quantity,  PhoneAndAccessoriesStore store) throws NullProductException {
+    public Map<Product, Integer> addProductToStore(Product product, int quantity) throws NullProductException {
         Map<Product, Integer> addProduct;
         if(product != null){
             store.setProducts(product, quantity);
@@ -26,7 +28,7 @@ public class CashierService implements  iCashierService{
     }
 
     @Override
-    public boolean removeProduct(int productId,  PhoneAndAccessoriesStore store) {
+    public boolean removeProduct(int productId) {
         boolean removeFlag = false;
         Map<Product, Integer>  products = store.getProducts();
          Set<Map.Entry<Product, Integer>> productEntrySet = products.entrySet();
@@ -43,7 +45,7 @@ public class CashierService implements  iCashierService{
     }
 
     @Override
-    public boolean restockProduct(int productId, int quantity,  PhoneAndAccessoriesStore store) {
+    public boolean restockProduct(int productId, int quantity) {
         boolean restockFlag = false;
         Map<Product,Integer> products = store.getProducts();
         Set<Map.Entry<Product, Integer>> productEntrySet = products.entrySet();

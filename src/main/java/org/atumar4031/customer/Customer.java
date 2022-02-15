@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Customer extends User {
     private Map<Product, Integer> cart;
-    private double wallet;
+    private double wallet = 0.00;
 
     public Customer() {
         this.cart = new HashMap<>();
