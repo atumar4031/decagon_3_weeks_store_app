@@ -7,6 +7,9 @@ import org.atumar4031.exceptions.NullProductException;
 import org.atumar4031.exceptions.StaffNotAuthorizedException;
 import org.atumar4031.product.Product;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,7 +66,7 @@ public class CashierService implements  iCashierService{
     }
 
     @Override
-    public void sellProducts(Cashier cashier, PhoneAndAccessoriesStore store, Customer customer) throws StaffNotAuthorizedException, InsufficientFundException {
+    public void sellProducts(Cashier cashier, PhoneAndAccessoriesStore store, Customer customer) throws StaffNotAuthorizedException, InsufficientFundException, IOException {
         Map<Product,Integer> map = customer.getCart();
         double customerWallet =  customer.getWallet();
         double storeAccount = store.getStoreAccount();
@@ -88,8 +91,37 @@ public class CashierService implements  iCashierService{
             customerWallet -= totalAmount;
             customer.setWallet(customerWallet);
             storeAccount += totalAmount;
+            storeAccount += totalAmount;
             store.setStoreAccount(storeAccount);
         }
+        generateReceipt(map, totalAmount, storeAccount, customer, cashier);
         map.clear();
+    }
+    private String generateReceipt(Map<Product, Integer> cart, double expectedAmount, double payment, Customer customer, Cashier cashier) throws IOException {
+        String receipt = "===== Thanks for patronizing " + customer.getName() + " ========\n" +
+                "Transaction Details\n" +
+                "=============================================\n";
+        for( Map.Entry<Product, Integer> each: cart.entrySet()){
+            receipt += "Product Name: "+ each.getKey().getName()+"\n" +
+                    "Price       : "+ each.getKey().getPrice()+"\n" +
+                    "Units       : "+ each.getValue()+"\n" +
+                    "Cost        : "+ (each.getKey().getPrice() * (double) each.getValue())+"\n" +
+                    "=============================================\n";
+        }
+        receipt += "Total Price: "+expectedAmount+"\n" +
+                "Amount paid: "+payment+"\n" +
+                "Balance:    "+(payment-expectedAmount)+"\n" +
+                "Validated by "+cashier.getName();
+
+        try(FileWriter writer = new FileWriter(new File("/constants/receipts/receipt.txt")))
+        {
+            writer.write(receipt);
+        }catch (IOException io){
+            System.out.println("IO exception found");
+        }
+
+
+
+        return receipt;
     }
 }
