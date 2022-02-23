@@ -11,30 +11,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Reading {
-    public static void main(String[] args) throws IOException, EmptyInputException {
-        Product[] pro = readProductFromExcel();
-//        System.out.println(pro.length);
-        for (int i = 0; i < pro.length; i++) {
-
-            Product p = pro[i];
-//            System.out.println("product : "+p+ " quantity: "+ quantity);
-            System.out.println(p.getProductName());
-            System.out.println(p.getProductQuantity());
-
-        }
-    }
-//            System.out.println(p.toString());
-
     public static Product[] readProductFromExcel() throws IOException, EmptyInputException {
-        String path = "phoneStore.xlsx";
+        String path = "src/main/java/org/atumar4031/constants/phoneStore.xlsx";
 
         FileInputStream inputStream = new FileInputStream(path);
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
         XSSFSheet sheet = workbook.getSheetAt(0);
         int rowCount = sheet.getLastRowNum();
         Product[] products = new Product[rowCount];
-        for (int r = 1; r <= rowCount; r++){
-            XSSFRow row = sheet.getRow(r);
+        for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++){
+            XSSFRow row = sheet.getRow(rowIndex);
 
             Category category = new Category(
                     row.getCell(2).getStringCellValue(),
@@ -42,10 +28,10 @@ public class Reading {
                     row.getCell(6).getStringCellValue()
             );
 
-            products[r - 1] = new Product(
+            products[rowIndex - 1] = new Product(
                     (int) row.getCell(0).getNumericCellValue(),
                           row.getCell(1).getStringCellValue(),
-                    (Double) row.getCell(4).getNumericCellValue(),
+                    (double) row.getCell(4).getNumericCellValue(),
                     (int) row.getCell(5).getNumericCellValue(),
                     category,
                     row.getCell(5).getNumericCellValue() > 0? "Available" : "Product out of stock"

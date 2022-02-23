@@ -92,15 +92,7 @@ int itemtracker = 1;
 
     @Override
     public void sellProducts(Cashier cashier, Store store, Customer customer) throws StaffNotAuthorizedException, InsufficientFundException, IOException, EmptyShoppingCartException {
-        /*
-        * 1. Sell products of cart if cart contains product items
-        * 2. Empty the cart after selling product
-        * 3. Reduce product quantity from store base on what was sold
-        * 4. Deduct cart amount from costumers wallet after selling
-        * 5. Add the deducted amount to store account after selling
-        * 6. Ensure amount flow is accurate
-        *
-        * */
+
         Product[] products = store.getProducts();
         Map<Product,Integer> customerShoppingCart = customer.getShoppingCart(); // naming
         double customerWallet =  customer.getCustomerWallet();
