@@ -1,0 +1,12 @@
+===== Thanks for patronizing Bala ========
+Transaction Details
+=============================================
+Product Name: iphone 7
+Price       : 130000.0
+Units       : 2
+Cost        : 260000.0
+=============================================
+Total Price: 260000.0
+Amount paid: 260000.0
+Balance:    0.0
+Validated by Umar

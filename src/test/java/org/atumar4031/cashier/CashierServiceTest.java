@@ -1,125 +1,84 @@
 package org.atumar4031.cashier;
 
-import org.atumar4031.PhoneAndAccessoriesStore;
+import org.atumar4031.Store;
 import org.atumar4031.constants.Gender;
-import org.atumar4031.customer.Customer;
-import org.atumar4031.exceptions.NullProductException;
-import org.atumar4031.product.Category;
-import org.atumar4031.product.Product;
-import org.atumar4031.utilities.Applicant;
+import org.atumar4031.constants.Role;
+import org.atumar4031.exceptions.*;
+import org.atumar4031.model.*;
+import org.atumar4031.constants.Category;
+import org.atumar4031.services.cashier.CashierServiceImple;
+import org.atumar4031.services.customer.CustomerService;
+import org.atumar4031.services.customer.CustomerServiceImple;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
 public class CashierServiceTest {
-    private CashierService cashierService;
-    private Cashier cashier;
-    private Product product;
-    private Category category;
-    private PhoneAndAccessoriesStore store;
-    private List<Applicant> applicantList;
-    private Applicant applicant1;
-    private Applicant applicant2;
-    private Customer customer;
+    private Product iphone13Pro;
+    private Product iphone7;
+    private Category productCategory;
+    private Store PhoneStore;
+   private  Cashier cashierUsman;
+    Cashier cashierUmar;
+    private CashierServiceImple cashierService;
+    Customer customer;
+    CustomerServiceImple customerService;
+
     LocalDateTime t;
+
     @Before
     public void setUp() throws Exception {
         t = LocalDateTime.now();
-        store = new PhoneAndAccessoriesStore();
-        cashierService = new CashierService();
-        cashier = new Cashier();
-        customer = new  Customer(
-                "Almustapha Tukur",
-                "atumar4031@gmail.com",
-                "07066616752",
-                "Edo tech park",
-                800000.00);
-        category = new Category("Television","Black","Lead display Screen");
-        product = new Product(101, "Samsung 1012",22000, category);
-        applicantList = new ArrayList<>();
-        applicant1 = new Applicant("Umar","umar@gmail.com",
-                "08166666666","Yar  yara",
-                "MSc",30, Gender.MALE, 2);
-        applicant2 = new Applicant("Asmau","asmau@gmail.com",
-                "08166616752","T wada",
-                "BSC",30,Gender.FEMALE, 2);
+        PhoneStore = new Store(101, "PhoneStore");
+        cashierService = new CashierServiceImple();
+        productCategory = new Category("iphone","Black","4GB");
+        iphone7 = new Product(101, "iphone 7",22000,2, productCategory,"available");
+        iphone13Pro = new Product(101, "iphone 7",22000,2, productCategory,"available");
+        cashierUmar = new Cashier("101","Umar","umar@gmail.com","0000999888","", Role.CASHIER, Gender.MALE,25);
+        PhoneStore.getCashierList().add(cashierUmar);
+        cashierUsman = new Cashier("10101","usman","usman@gmail.com","0000999888","", Role.CASHIER, Gender.MALE,21);
+        customer = new Customer("Bala", "abu@gmail.com","08066765467","Tudun wada",996000.00);
+        customerService = new CustomerServiceImple();
     }
 
     @Test
-    public void toCheckIfProductIsAddedToStore() throws NullProductException {
-        //given
-        Map<Product,Integer> result = cashierService.addProductToStore(product, 2, store);
-        //when
-        assertTrue(store.getProducts().size() > 0);
-        //then
+    public void toCheckIfProductIsAddedToStore()
+            throws NullProductException, EmptyInputException, AutorizationException, IOException {
+        cashierService.addProductToStore(cashierUmar, iphone13Pro, 2, PhoneStore);
+        Product InsertedProduct = PhoneStore.getProducts()[PhoneStore.getProducts().length - 1];
+        assertEquals(iphone13Pro, InsertedProduct);
     }
 
     @Test
-    public void isProductListIncreasing() throws NullProductException {
-        //given
-        int beforSize = store.getProducts().size();
-        Map<Product,Integer> result = cashierService.addProductToStore(product , 3, store);
-        int afterSize = store.getProducts().size();
-        //when
-        assertTrue(beforSize < afterSize);
-        //then
+    public void shouldCheckIfUserIsAuthorized() {
+        assertThrows(AutorizationException.class, () ->  cashierService.addProductToStore(cashierUsman, iphone13Pro, 2, PhoneStore));
     }
 
+
     @Test
-    public void isProductRemoved() throws NullProductException {
-        cashierService.addProductToStore(product,3, store);
-        boolean removeFlag  = cashierService.removeProduct(product.getProductId(), store);
-        assertTrue(removeFlag);
-    }
-    @Test
-    public void isProductRestocked() throws NullProductException {
-        cashierService.addProductToStore(product,3, store);
-        boolean restock = cashierService.restockProduct(product.getProductId(), 10, store);
+    public void removeProductIfAvailableInTheStore() throws NullProductException, EmptyInputException, AutorizationException, IOException {
+        cashierService.addProductToStore(cashierUmar, iphone13Pro, 2, PhoneStore);
+       assertThrows(ProductNotFoundException.class, () ->  cashierService.removeProduct(iphone13Pro.getProductId(), PhoneStore));
+   }
+
+   @Test
+    public void isProductRestocked() throws NullProductException, EmptyInputException, AutorizationException, IOException {
+        boolean restock = cashierService.restockProduct(iphone7, 10, PhoneStore);
         assertTrue(restock);
-
     }
+
     @Test
-    public void checkProductQuantityAfterRestock() throws NullProductException {
-        int quantityBeforeRestock = 3;
-        int quantityAfterRestock = 0;
-        cashierService.addProductToStore(product,quantityBeforeRestock, store);
-        boolean restock = cashierService.restockProduct(product.getProductId(), 10, store);
-        Map<Product, Integer> products = store.getProducts();
-        Set<Map.Entry<Product, Integer>> entrySet = products.entrySet();
-        for (Map.Entry<Product, Integer> e: entrySet){
-            if(e.getKey().getProductId() == product.getProductId()){
-                quantityAfterRestock = e.getValue();
-            }
-        }
-        assertTrue(quantityBeforeRestock < quantityAfterRestock);
+    public void sellProducts() throws EmptyInputException, NoSuchQuantityAvailabe, productNotAvailableException, EmptyShoppingCartException, StaffNotAuthorizedException, InsufficientFundException, IOException {
 
+        customerService.addProductToShoppingCart(iphone7.getProductName(), productCategory, PhoneStore, 2, customer);
+        Product[] products = PhoneStore.getProducts();
+        double StoreAccountBalanceBefore = PhoneStore.getStoreAccount();
+        cashierService.sellProducts(cashierUmar, PhoneStore,customer);
+        double StoreAccountBalanceAfter = PhoneStore.getStoreAccount();
+        assertTrue(StoreAccountBalanceBefore < StoreAccountBalanceAfter);
     }
-    @Test
-    public void sellProducts() throws NullProductException {
-        int quantityBeforeRestock = 3;
-        int quantityAfterRestock = 0;
-        cashierService.addProductToStore(product,quantityBeforeRestock, store);
-        boolean restock = cashierService.restockProduct(product.getProductId(), 10, store);
-        Map<Product, Integer> products = store.getProducts();
-        Set<Map.Entry<Product, Integer>> entrySet = products.entrySet();
-        for (Map.Entry<Product, Integer> e: entrySet){
-            if(e.getKey().getProductId() == product.getProductId()){
-                quantityAfterRestock = e.getValue();
-            }
-        }
-        assertTrue(quantityBeforeRestock < quantityAfterRestock);
-        Product p = null;
-        assertThrows(NullProductException.class,
-                () -> cashierService.addProductToStore(p,quantityBeforeRestock, store));
-
-    }
-
-
 }

@@ -1,51 +1,46 @@
 package org.atumar4031.customer;
 
-import org.atumar4031.manager.Manager;
-import org.atumar4031.product.Category;
-import org.atumar4031.product.Product;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Map;
-
+import org.atumar4031.Store;
+import org.atumar4031.constants.Category;
+import org.atumar4031.exceptions.*;
+import org.atumar4031.model.*;
+import org.atumar4031.services.customer.CustomerServiceImple;
+import org.junit.*;
 import static org.junit.Assert.*;
 
 public class CustomerServiceTest {
     Manager manager;
-    CustomerService service;
-    Category category1;
-    Category category2;
-    Product product1;
-    Product product2;
+    CustomerServiceImple service;
+    Category productToBuyCategory;
+    Product iphoneXr;
     Customer customer;
+    Store phoneStore;
 
     @Before
     public void setUp() throws Exception {
-        service = new CustomerService();
+        phoneStore = new Store(101, "phoneStore");
+        service = new CustomerServiceImple();
         manager = new Manager();
-        category1 = new Category("A-series","Golden","24GB");
-        category2 = new Category("X-series","white","68GB");
-        product1 = new Product(101, "Samsung 1012",57000, category1);
-        product2 = new Product(102, "Samsung 7865",32000, category2);
+        productToBuyCategory = new Category(
+                "iphone",
+                "white",
+                "6GB"
+        );
+        iphoneXr = new Product(101, "iPhone XR",57000,2, productToBuyCategory,"available");
         customer = new Customer("Bala", "abu@gmail.com","08066765467","Tudun wada",500000.00);
     }
+  // addProductToShoppingCart(String productName, Category productCategory, Store store, int quantityToBuy, Customer customer)
 
     @Test
-    public void shouldCompareTheCartSizeBefoAndAfterCustomerAddProduct() {
-        int sizeBeforeAdding = customer.getCart().size();
-        service.addToCart(product1, 1, customer);
-        service.addToCart(product2, 5, customer);
-        int sizeAfterAdding = customer.getCart().size();
+    public void shouldCheckIfTheShoppingCartSizeIncreaseAfterAdding() throws productNotAvailableException, NoSuchQuantityAvailabe {
+        int sizeBeforeAdding = customer.getShoppingCart().size();
+        service.addProductToShoppingCart(iphoneXr.getProductName(), productToBuyCategory,phoneStore,1, customer);
+         int sizeAfterAdding = customer.getShoppingCart().size();
         assertTrue(sizeBeforeAdding < sizeAfterAdding);
     }
-
     @Test
-    public void toCheckIfProductQuantityIsIncreasingAfterAddingSameProductToCart() {
-        service.addToCart(product1, 1, customer);
-        Map<Product, Integer> cart = customer.getCart();
-        var beforeUpdate = cart.get(product1);
-        service.addToCart(product1, 1, customer);
-        var afterUpdate = cart.get(product1);
-        assertTrue(beforeUpdate < afterUpdate);
+    public void productOutOfQuantityException(){
+        assertThrows(productNotAvailableException.class,
+                ()-> service.addProductToShoppingCart("          ", productToBuyCategory,phoneStore,1, customer));
     }
 }

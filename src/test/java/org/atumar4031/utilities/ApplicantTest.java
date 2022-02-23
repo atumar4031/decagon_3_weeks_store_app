@@ -1,8 +1,11 @@
 package org.atumar4031.utilities;
 
+import org.atumar4031.Store;
 import org.atumar4031.constants.Gender;
+import org.atumar4031.exceptions.ApplicantAlreadyExistException;
 import org.atumar4031.exceptions.InvalidEmailException;
 import org.atumar4031.exceptions.NullApplicantException;
+import org.atumar4031.model.Applicant;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,11 +16,12 @@ import static org.junit.Assert.*;
 public class ApplicantTest {
     private Applicant applicant1;
     private Applicant applicant2;
-    private Applicant apply;
+    private Store phoneStore;
     private LocalDateTime t = LocalDateTime.now();
     @Before
     public void setUp() throws Exception {
-        apply = new Applicant();
+        phoneStore = new Store(101,"phoneStore");
+//        apply = new Applicant();
         applicant1 = new Applicant("Umar","umar@gmail.com",
                 "08166666666","Yar  yara",
                 "MSc",30, Gender.MALE, 2);
@@ -27,14 +31,22 @@ public class ApplicantTest {
     }
 
     @Test
-    public void TestingApplicant() throws InvalidEmailException, NullApplicantException {
+    public void TestingApplicant() throws InvalidEmailException, NullApplicantException, ApplicantAlreadyExistException {
 
         //given
-        int expected = 2;
-        apply.apply(applicant1);
-        apply.apply(applicant2);
+        int expected = 1;
+        applicant1.apply(phoneStore);
         //when
-        assertEquals(expected, apply.manager.getApplicants().size());
+        assertEquals(expected, phoneStore.getApplicants().size());
+        //then
+    }
+
+    @Test
+    public void checkMultipleApplications() throws InvalidEmailException, NullApplicantException, ApplicantAlreadyExistException {
+
+        applicant1.apply(phoneStore);
+        //when
+        assertThrows(ApplicantAlreadyExistException.class, ()->applicant1.apply(phoneStore));;
         //then
     }
 }
