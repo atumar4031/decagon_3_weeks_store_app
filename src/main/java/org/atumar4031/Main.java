@@ -56,16 +56,18 @@ public class Main {
 
 //        Category goldIPhone = new Category("iphone","black","4GB");
         customerService.addProductToShoppingCart("Nokia", phoneStore,3, bala);
-        customerService.addProductToShoppingCart("Nokia", phoneStore,2, kamal);
+        customerService.addProductToShoppingCart("Nokia", phoneStore,1, kamal);
         customerService.addProductToShoppingCart("Nokia", phoneStore,2, samira);
         customerService.addProductToShoppingCart("iphone Xr", phoneStore,4, musa);
+
 //        System.out.println(balaCart);
 //        System.out.println(musa.getShoppingCart());
 //        System.out.println(phoneStore.getStoreAccount());
 //        cashierStaff.attendCustomer(phoneStore,cashierUmar);
 //        System.out.println(phoneStore.getStoreAccount());
-//        System.out.println(musa.getShoppingCart());
-//        System.out.println(phoneStore.getCustomersToAttend());
+        System.out.println(musa.getShoppingCart());
+        phoneStore.getCustomersToAttend().removeFromQueue();
+        System.out.println(phoneStore.getCustomersToAttend().peek());
         // view product is working
 //        customerService.viewByCategory("main", phoneStore);
 

@@ -87,8 +87,8 @@ int itemtracker = 1;
         if (!staff.getRole().equals(Role.CASHIER))
             throw new StaffNotAuthorizedException("Your are not authorized to make this transaction");
 
-        PriorityQueue<Customer> customers = store.getCustomersToAttend();
-        for (Customer customer: customers){
+        MyPriorityQueue customers = store.getCustomersToAttend();
+        for (var customer: customers){
             sellProducts(store, customer);
         }
 

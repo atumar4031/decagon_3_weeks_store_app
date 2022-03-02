@@ -16,7 +16,9 @@ public class Store {
     private Product[] products;
     private final List<Receipt> receipts;
     private List<Staff> StaffList;
-    private PriorityQueue<Customer> customersToAttend;
+
+    private MyPriorityQueue customersToAttend;
+
     private double storeAccount = 0.00;
 
     public Store(int storeId, String storeName) throws IOException {
@@ -26,7 +28,8 @@ public class Store {
         this.receipts = new ArrayList<>();
         this.StaffList = new ArrayList<>();
         this.applicants = new ArrayList<>();
-        this.customersToAttend = new PriorityQueue<>();
+
+        this.customersToAttend = new MyPriorityQueue();
     }
 
     public String getStoreName() {
@@ -41,11 +44,11 @@ public class Store {
         this.applicants = applicants;
     }
 
-    public PriorityQueue<Customer> getCustomersToAttend() {
+    public MyPriorityQueue getCustomersToAttend() {
         return customersToAttend;
     }
 
-    public void setCustomersToAttend(PriorityQueue<Customer> customersToAttend) {
+    public void setCustomersToAttend(MyPriorityQueue customersToAttend) {
         this.customersToAttend = customersToAttend;
     }
 

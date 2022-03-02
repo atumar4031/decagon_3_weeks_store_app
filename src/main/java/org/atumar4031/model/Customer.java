@@ -3,9 +3,12 @@ package org.atumar4031.model;
 import org.atumar4031.constants.Gender;
 
 
-public class Customer extends User implements Comparable<Customer> {
+public class Customer extends User  {
+
     private Cart<Product, Integer> shoppingCart;
     private Wallet wallet;
+
+    public Customer(){}
 
     public Customer(
             String name, String email, String phone,
@@ -26,14 +29,16 @@ public class Customer extends User implements Comparable<Customer> {
 
     public Wallet getWallet() {return wallet;}
 
-
-
-    @Override
-    public int compareTo(Customer otherCustomer) {
-        if(this.getShoppingCart().getProduct().getProductName().equalsIgnoreCase(otherCustomer.getShoppingCart().getProduct().getProductName()));
-            int sortValue = this.getShoppingCart().getQuantity() - otherCustomer.getShoppingCart().getQuantity();
-        return sortValue;
-    }
+//
+//
+//    @Override
+//    public int compareTo(Customer otherCustomer) {
+//
+//        if(this.getShoppingCart().getProduct().getProductName().equalsIgnoreCase(otherCustomer.getShoppingCart().getProduct().getProductName()));
+//            int sortValue = this.getShoppingCart().getQuantity() - otherCustomer.getShoppingCart().getQuantity();
+//
+//            return sortValue;
+//    }
 
     @Override
     public String toString() {

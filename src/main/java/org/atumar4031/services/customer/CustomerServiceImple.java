@@ -21,7 +21,8 @@ public class CustomerServiceImple implements CustomerService {
                 if(product.getProductQuantity() > quantityToBuy
                         && product.getProductStatus().equalsIgnoreCase("AVAILABLE")) {
                     customer.setShoppingCart(new Cart(product, quantityToBuy));
-                    store.getCustomersToAttend().add(customer);
+                    store.getCustomersToAttend().addToQueue(customer);
+
                     break;
                 }
             }
