@@ -1,40 +1,38 @@
 package org.atumar4031.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.atumar4031.constants.Gender;
 
-public class Customer extends User {
-    private Map<Product, Integer> shoppingCart;
-    private double CustomerWallet = 0.00;
 
-    public Customer() {
-        this.shoppingCart = new HashMap<>();
-    }
+public class Customer extends User implements Comparable<Customer> {
+    private Cart<Product, Integer> shoppingCart;
+    private Wallet wallet;
 
     public Customer(
-                    String name, String email, String phone,
-                    String address,
-                    double wallet
+            String name, String email, String phone,
+            Gender gender, String address
     ) {
-        super(name, email, phone, address);
-        this.shoppingCart = new HashMap<>();
-        this.CustomerWallet = wallet;
+        super(name, email, phone,gender, address);
+        this.wallet = new Wallet();
+        this.shoppingCart = new Cart();
     }
 
-    public Map<Product, Integer> getShoppingCart() {
+    public Cart<Product, Integer> getShoppingCart() {
         return shoppingCart;
     }
 
-    public void setShoppingCart(Map<Product , Integer> shoppingCart) {
+    public void setShoppingCart(Cart<Product, Integer> shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
 
-    public double getCustomerWallet() {
-        return CustomerWallet;
-    }
+    public Wallet getWallet() {return wallet;}
 
-    public void setCustomerWallet(double customerWallet) {
-        this.CustomerWallet = customerWallet;
+
+
+    @Override
+    public int compareTo(Customer otherCustomer) {
+        if(this.getShoppingCart().getProduct().getProductName().equalsIgnoreCase(otherCustomer.getShoppingCart().getProduct().getProductName()));
+            int sortValue = this.getShoppingCart().getQuantity() - otherCustomer.getShoppingCart().getQuantity();
+        return sortValue;
     }
 
     @Override

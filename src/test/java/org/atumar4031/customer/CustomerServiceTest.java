@@ -2,6 +2,7 @@ package org.atumar4031.customer;
 
 import org.atumar4031.Store;
 import org.atumar4031.constants.Category;
+import org.atumar4031.constants.Gender;
 import org.atumar4031.exceptions.*;
 import org.atumar4031.model.*;
 import org.atumar4031.services.customer.CustomerServiceImple;
@@ -9,9 +10,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class CustomerServiceTest {
-    Manager manager;
-    CustomerServiceImple service;
-    Category productToBuyCategory;
+    CustomerServiceImple customerService;
     Product iphoneXr;
     Customer customer;
     Store phoneStore;
@@ -19,28 +18,35 @@ public class CustomerServiceTest {
     @Before
     public void setUp() throws Exception {
         phoneStore = new Store(101, "phoneStore");
-        service = new CustomerServiceImple();
-        manager = new Manager();
-        productToBuyCategory = new Category(
-                "iphone",
-                "white",
-                "6GB"
-        );
-        iphoneXr = new Product(101, "iPhone XR",57000,2, productToBuyCategory,"available");
-        customer = new Customer("Bala", "abu@gmail.com","08066765467","Tudun wada",500000.00);
+        customerService = new CustomerServiceImple();
+        iphoneXr = new Product(101, "iPhone XR",57000,2, Category.PHONE,"available");
+        customer = new Customer("Bala", "abu@gmail.com","08066765467", Gender.MALE,"Tudun wada");
+        customerService.fundMyWallet(customer, 500000.00);
     }
-  // addProductToShoppingCart(String productName, Category productCategory, Store store, int quantityToBuy, Customer customer)
-
     @Test
-    public void shouldCheckIfTheShoppingCartSizeIncreaseAfterAdding() throws productNotAvailableException, NoSuchQuantityAvailabe {
-        int sizeBeforeAdding = customer.getShoppingCart().size();
-        service.addProductToShoppingCart(iphoneXr.getProductName(), productToBuyCategory,phoneStore,1, customer);
-         int sizeAfterAdding = customer.getShoppingCart().size();
-        assertTrue(sizeBeforeAdding < sizeAfterAdding);
+    public void shouldAddProductToShoppingCart() throws productNotAvailableException {
+        customerService.addProductToShoppingCart("iphone Xr",phoneStore,2,customer);
+        int customersQueue = phoneStore.getCustomersToAttend().size();
+        assertEquals(1, customersQueue);
+    }
+    @Test
+    public void shouldCheckIfWalletCanBeFunded(){
+        var balanceBefore = customer.getWallet().getBalance();
+        customerService.fundMyWallet(customer, 2000);
+        var balanceAfterFund = customer.getWallet().getBalance();
+        assertTrue(balanceBefore < balanceAfterFund);
+    }
+    @Test
+    public void toCheckIfProductAreFoundBaseOnCategories(){
+        assertThrows(ProductNotFoundException.class, () -> {
+           customerService.viewByCategory("main", phoneStore);
+        });
     }
     @Test
     public void productOutOfQuantityException(){
         assertThrows(productNotAvailableException.class,
-                ()-> service.addProductToShoppingCart("          ", productToBuyCategory,phoneStore,1, customer));
+                ()-> customerService.addProductToShoppingCart(" ",phoneStore,1, customer));
     }
+
+
 }

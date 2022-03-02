@@ -1,7 +1,7 @@
 package org.atumar4031.model;
 
-import org.atumar4031.exceptions.EmptyInputException;
 import org.atumar4031.constants.Category;
+import org.atumar4031.exceptions.EmptyInputException;
 
 public class Product {
     private int productId;
@@ -30,7 +30,7 @@ public class Product {
 
     }
 
-    public Product(int productId, String productName, double productPrice,int productQuantity, Category productCategory, String productStatus) {
+    public Product(int productId, String productName, double productPrice, int productQuantity, Category productCategory, String productStatus) {
         this.productId = productId;
         this.productName = productName;
         this.productQuantity = productQuantity;

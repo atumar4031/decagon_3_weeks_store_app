@@ -1,22 +1,22 @@
 package org.atumar4031;
 
 import org.atumar4031.inputOutputs.Reading;
-import org.atumar4031.model.Applicant;
-import org.atumar4031.model.Cashier;
-import org.atumar4031.model.Receipt;
-import org.atumar4031.model.Product;
+import org.atumar4031.model.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class Store {
     private int storeId;
     private String storeName;
+
     private List<Applicant> applicants;
     private Product[] products;
     private final List<Receipt> receipts;
-    private List<Cashier> cashierList;
+    private List<Staff> StaffList;
+    private PriorityQueue<Customer> customersToAttend;
     private double storeAccount = 0.00;
 
     public Store(int storeId, String storeName) throws IOException {
@@ -24,25 +24,29 @@ public class Store {
         this.storeName = storeName;
         this.products = Reading.readProductFromExcel();
         this.receipts = new ArrayList<>();
-        this.cashierList = new ArrayList<>();
-        applicants = new ArrayList<>();
-
-    }
-
-    public int getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(int storeId) {
-        this.storeId = storeId;
+        this.StaffList = new ArrayList<>();
+        this.applicants = new ArrayList<>();
+        this.customersToAttend = new PriorityQueue<>();
     }
 
     public String getStoreName() {
         return storeName;
     }
-
     public void setStoreName(String storeName) {
         this.storeName = storeName;
+    }
+
+
+    public void setApplicants(List<Applicant> applicants) {
+        this.applicants = applicants;
+    }
+
+    public PriorityQueue<Customer> getCustomersToAttend() {
+        return customersToAttend;
+    }
+
+    public void setCustomersToAttend(PriorityQueue<Customer> customersToAttend) {
+        this.customersToAttend = customersToAttend;
     }
 
     public List<Applicant> getApplicants() {
@@ -52,23 +56,20 @@ public class Store {
     public double getStoreAccount() {
         return storeAccount;
     }
-
     public void setStoreAccount(double storeAccount) {
         this.storeAccount = storeAccount;
     }
 
-    public List<Cashier> getCashierList() {
-        return cashierList;
+    public List<Staff> getStaffList() {
+        return StaffList;
     }
-    public void setCashierList(List<Cashier> cashierList) {
-        this.cashierList = cashierList;
+    public void setStaffList(List<Staff> staffList) {
+        this.StaffList = staffList;
     }
-
 
     public Product[] getProducts() {
         return products;
     }
-
     public void setProducts(Product[] products) {
         this.products = products;
     }
@@ -76,7 +77,6 @@ public class Store {
     public List<Receipt> getReceipts() {
         return receipts;
     }
-
     public void setReceipts(Receipt receipts) {
 
         this.receipts.add(receipts);

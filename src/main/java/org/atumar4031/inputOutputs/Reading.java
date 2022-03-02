@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class Reading {
+
     public static Product[] readProductFromExcel() throws IOException, EmptyInputException {
         String path = "src/main/java/org/atumar4031/constants/phoneStore.xlsx";
 
@@ -22,12 +23,13 @@ public class Reading {
         for (int rowIndex = 1; rowIndex <= rowCount; rowIndex++){
             XSSFRow row = sheet.getRow(rowIndex);
 
-            Category category = new Category(
-                    row.getCell(2).getStringCellValue(),
-                    row.getCell(3).getStringCellValue(),
-                    row.getCell(6).getStringCellValue()
-            );
-
+            Category category = null;
+            switch (row.getCell(2).getStringCellValue()){
+                case "phone" -> category = Category.PHONE;
+                case "headset" -> category = Category.HEADSET;
+                case "charger" -> category = Category.CHARGER;
+                case "other" -> category = Category.OTHER;
+            }
             products[rowIndex - 1] = new Product(
                     (int) row.getCell(0).getNumericCellValue(),
                           row.getCell(1).getStringCellValue(),
