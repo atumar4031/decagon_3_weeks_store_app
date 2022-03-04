@@ -42,6 +42,7 @@ public class Main {
         Customer bala = new Customer("Bala", "abu@gmail.com","08066765467",Gender.MALE, "Tudun wada");
         Customer musa = new Customer("Musa", "musa@gmail.com","07078987654",Gender.MALE, "Edo tech park");
         Customer kamal = new Customer("Kamal", "kamal@gmail.com","07078987654",Gender.MALE, "Edo tech park");
+        Customer umar = new Customer("umar", "umar@gmail.com","07078987654",Gender.MALE, "Edo tech park");
         Customer samira = new Customer("Samira", "samira@gmail.com","07078987654",Gender.FEMALE, "Edo tech park");
         CustomerServiceImple customerService = new CustomerServiceImple();
         customerService.fundMyWallet(bala, 500000.0);
@@ -54,10 +55,11 @@ public class Main {
 //        Map<Product, Integer> balaCart = bala.getShoppingCart().getCart();
 
 
-        customerService.addProductToShoppingCart("Nokia", phoneStore,4, musa);
+//        customerService.addProductToShoppingCart("Nokia", phoneStore,4, musa);
         customerService.addProductToShoppingCart("Nokia", phoneStore,2, bala);
         customerService.addProductToShoppingCart("Nokia", phoneStore,3, kamal);
         customerService.addProductToShoppingCart("iphone Xr", phoneStore,4, samira);
+        customerService.addProductToShoppingCart("iphone Xr", phoneStore,2, umar);
 
 //        System.out.println(balaCart);
 //        System.out.println(musa.getShoppingCart());

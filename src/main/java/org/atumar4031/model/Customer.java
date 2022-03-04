@@ -19,26 +19,14 @@ public class Customer extends User  {
         this.shoppingCart = new Cart();
     }
 
+    public Wallet getWallet() {return wallet;}
+
     public Cart<Product, Integer> getShoppingCart() {
         return shoppingCart;
     }
-
     public void setShoppingCart(Cart<Product, Integer> shoppingCart) {
         this.shoppingCart = shoppingCart;
     }
-
-    public Wallet getWallet() {return wallet;}
-
-//
-//
-//    @Override
-//    public int compareTo(Customer otherCustomer) {
-//
-//        if(this.getShoppingCart().getProduct().getProductName().equalsIgnoreCase(otherCustomer.getShoppingCart().getProduct().getProductName()));
-//            int sortValue = this.getShoppingCart().getQuantity() - otherCustomer.getShoppingCart().getQuantity();
-//
-//            return sortValue;
-//    }
 
     @Override
     public String toString() {
