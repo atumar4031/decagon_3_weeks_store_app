@@ -54,20 +54,19 @@ public class Main {
 //        Map<Product, Integer> balaCart = bala.getShoppingCart().getCart();
 
 
-//        Category goldIPhone = new Category("iphone","black","4GB");
-        customerService.addProductToShoppingCart("Nokia", phoneStore,3, bala);
-        customerService.addProductToShoppingCart("Nokia", phoneStore,1, kamal);
-        customerService.addProductToShoppingCart("Nokia", phoneStore,2, samira);
-        customerService.addProductToShoppingCart("iphone Xr", phoneStore,4, musa);
+        customerService.addProductToShoppingCart("Nokia", phoneStore,4, musa);
+        customerService.addProductToShoppingCart("Nokia", phoneStore,2, bala);
+        customerService.addProductToShoppingCart("Nokia", phoneStore,3, kamal);
+        customerService.addProductToShoppingCart("iphone Xr", phoneStore,4, samira);
 
 //        System.out.println(balaCart);
 //        System.out.println(musa.getShoppingCart());
 //        System.out.println(phoneStore.getStoreAccount());
 //        cashierStaff.attendCustomer(phoneStore,cashierUmar);
 //        System.out.println(phoneStore.getStoreAccount());
-        System.out.println(musa.getShoppingCart());
-        phoneStore.getCustomersToAttend().removeFromQueue();
-        System.out.println(phoneStore.getCustomersToAttend().peek());
+//        System.out.println(musa.getShoppingCart());
+//        phoneStore.getCustomersToAttend().removeFromQueue();
+        System.out.println(phoneStore.getCustomersToAttend());
         // view product is working
 //        customerService.viewByCategory("main", phoneStore);
 

@@ -28,7 +28,6 @@ public class Store {
         this.receipts = new ArrayList<>();
         this.StaffList = new ArrayList<>();
         this.applicants = new ArrayList<>();
-
         this.customersToAttend = new MyPriorityQueue();
     }
 
