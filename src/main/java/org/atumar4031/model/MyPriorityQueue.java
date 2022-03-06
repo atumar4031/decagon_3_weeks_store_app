@@ -1,8 +1,7 @@
 package org.atumar4031.model;
-import java.util.Iterator;
 import java.util.LinkedList;
 
-public class MyPriorityQueue implements Iterable<Customer>{
+public class MyPriorityQueue{
     private LinkedList<Customer> myQueue;
     private int index = 0;
 
@@ -46,9 +45,12 @@ public class MyPriorityQueue implements Iterable<Customer>{
         return myQueue.peekFirst();
     }
 
-    @Override
-    public Iterator<Customer> iterator() {
-        return null;
+    public boolean isEmpty(){
+        return myQueue.isEmpty();
+    }
+
+    public Customer poll(){
+        return myQueue.poll();
     }
 
     @Override

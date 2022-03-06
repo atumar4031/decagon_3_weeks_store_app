@@ -1,13 +1,14 @@
 package org.atumar4031.model;
-import org.atumar4031.constants.Gender;
+import org.atumar4031.enums.Gender;
 public class Applicant extends User{
 
-    private final String qualification;
-    private final int age;
-    private final int workingExperience;
-    private final Gender gender;
+    private  String qualification;
+    private  int age;
+    private  int workingExperience;
+    private  Gender gender;
     public static int applicantSerialId = 0;
 
+    public Applicant(){}
     public Applicant(String name, String email,
                      String phone, String address,
                      String qualification, int age, Gender gender, int workingExperience) {

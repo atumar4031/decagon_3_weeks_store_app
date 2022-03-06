@@ -1,20 +1,20 @@
 package org.atumar4031.services.staff;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Role;
+import org.atumar4031.enums.Role;
 import org.atumar4031.exceptions.*;
 import org.atumar4031.model.*;
 import java.io.*;
-import java.util.*;
 import java.util.Arrays;
 
 public class CashierStaff implements ProductManagementService, TransactionManagementService {
+//TODO : test this class function in main class
 
     @Override
     public void addProductToStore(Staff staff, Product product, int quantity,  Store store)
-            throws NullProductException, EmptyInputException, AutorizationException, IOException {
-        if (!store.getStaffList().contains(staff)){
-            throw new AutorizationException("You are not authorized to perform this operation");
+            throws InvalidInputException, InvalidInputException, StaffNotAuthorizedException, IOException {
+        if (!store.getStaffList().contains(staff) || !staff.getRole().equals(Role.CASHIER)){
+            throw new StaffNotAuthorizedException("You are not authorized to perform this operation");
         }
         if(product != null){
             if (
@@ -28,14 +28,17 @@ public class CashierStaff implements ProductManagementService, TransactionManage
                 store.setProducts(productsCopy);
             }
              else
-                throw new EmptyInputException("empty, negative, and null values are not allowed");
+                throw new InvalidInputException("empty, negative, and null values are not allowed");
         }else
-            throw new NullProductException("Product is can not be null");
+            throw new InvalidInputException("Product is can not be null");
     }
 int itemtracker = 1;
 
     @Override
-    public boolean removeProduct(int productId,  Store store) {
+    public boolean removeProduct(Staff staff, int productId,  Store store) throws StaffNotAuthorizedException {
+        if (!store.getStaffList().contains(staff) || !staff.getRole().equals(Role.CASHIER)){
+            throw new StaffNotAuthorizedException("You are not authorized to perform this operation");
+        }
         boolean removeFlag = false;
         Product[]  products = store.getProducts();
         for (Product product : products) {
@@ -62,11 +65,12 @@ int itemtracker = 1;
     }
 
     @Override
-    public boolean restockProduct(Product  productToRestock, int quantity,  Store store) {
+    public boolean restockProduct(Staff staff, Product  productToRestock, int quantity,  Store store) throws StaffNotAuthorizedException {
+        if (!store.getStaffList().contains(staff) || !staff.getRole().equals(Role.CASHIER)){
+            throw new StaffNotAuthorizedException("You are not authorized to perform this operation");
+        }
         boolean restockFlag = false;
        Product[] products = store.getProducts();
-//        Set<Map.Entry<Product, Integer>> productEntrySet = products.entrySet();
-
         for (Product product : products) {
             if (
                     product.getProductName().equalsIgnoreCase(productToRestock.getProductName())
@@ -83,19 +87,21 @@ int itemtracker = 1;
     }
 
     @Override
-    public void attendCustomer(Store store, Staff staff) throws StaffNotAuthorizedException, EmptyShoppingCartException, InsufficientFundException, IOException, productNotAvailableException {
-        if (!staff.getRole().equals(Role.CASHIER))
-            throw new StaffNotAuthorizedException("Your are not authorized to make this transaction");
-
-        MyPriorityQueue customers = store.getCustomersToAttend();
-        for (var customer: customers){
-            sellProducts(store, customer);
+    public void processCustomersInQueue(Store store, Staff staff) throws StaffNotAuthorizedException, EmptyShoppingCartException, InsufficientFundException, IOException{
+        if (!store.getStaffList().contains(staff) || !staff.getRole().equals(Role.CASHIER)){
+            throw new StaffNotAuthorizedException("You are not authorized to perform this operation");
+        }
+        int count = 1;
+        while(!store.getCustomersToAttend().isEmpty()){
+            Customer customerInqueue = store.getCustomersToAttend().poll();
+            sellProducts(store, customerInqueue);
+            System.out.println(count +") "+customerInqueue.getName() +" "+customerInqueue.getShoppingCart().getProduct().getProductName()+" "+ customerInqueue.getShoppingCart().getQuantity()+" Sold");
+            count++;
         }
 
     }
 
-
-    public void sellProducts(Store store, Customer customer) throws InsufficientFundException, IOException, EmptyShoppingCartException, productNotAvailableException {
+    public void sellProducts(Store store, Customer customer) throws InsufficientFundException, IOException, EmptyShoppingCartException, ProductNotFoundException {
        boolean productPresent = false;
         Cart<Product,Integer> customerShoppingCart = customer.getShoppingCart(); // naming
         Product productInStore = new Product();
@@ -115,11 +121,9 @@ int itemtracker = 1;
             index++;
         }
         if (!productPresent)
-            throw new productNotAvailableException("this product "+productToBuy.getProductName()+" is not available");
+            throw new ProductNotFoundException("this product "+productToBuy.getProductName()+" is not available");
         if(quantityInStore < quantityToBuy)
-            throw new productNotAvailableException("Insufficient product quantity ");
-        if (customer.getShoppingCart().getQuantity() <= 1)
-            throw new EmptyShoppingCartException("This shopping cart cannot be empty");
+            throw new NoSuchQuantityAvailabe("Product quantity not available now");
 
             double productPrice = productToBuy.getProductPrice();
             double totalAmountOfProduct = (productPrice * quantityToBuy);
@@ -128,10 +132,10 @@ int itemtracker = 1;
             storeAccount += totalAmountOfProduct;
             store.setStoreAccount(storeAccount);
             productInStore.setProductQuantity(productInStore.getProductQuantity() - quantityToBuy);
-            customer.setShoppingCart(new Cart<>());
+            generateReceipt(customer.getShoppingCart(), totalAmountOfProduct, totalAmountOfProduct, customer);
     }
     //
-    private String generateReceipt(Cart<Product, Integer> shoppingCart, double expectedAmount, double payment, Customer customer, Staff staff) throws IOException {
+    private String generateReceipt(Cart<Product, Integer> shoppingCart, double expectedAmount, double payment, Customer customer) throws IOException {
         String receipt = "===== Thanks for patronizing " + customer.getName() + " ========\n" +
                 "Transaction Details\n" +
                 "=============================================\n";
@@ -144,8 +148,7 @@ int itemtracker = 1;
 
         receipt += "Total Price: "+expectedAmount+"\n" +
                 "Amount paid: "+payment+"\n" +
-                "Balance:    "+(payment-expectedAmount)+"\n" +
-                "Validated by "+staff.getName();
+                "Balance:    "+(payment-expectedAmount)+"\n" ;
 
         try(FileWriter writer = new FileWriter(new File("receipt.txt")))
         {

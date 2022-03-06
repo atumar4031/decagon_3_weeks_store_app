@@ -1,8 +1,8 @@
 package org.atumar4031.customer;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Category;
-import org.atumar4031.constants.Gender;
+import org.atumar4031.enums.Category;
+import org.atumar4031.enums.Gender;
 import org.atumar4031.exceptions.*;
 import org.atumar4031.model.*;
 import org.atumar4031.services.customer.CustomerServiceImple;
@@ -24,7 +24,7 @@ public class CustomerServiceTest {
         customerService.fundMyWallet(customer, 500000.00);
     }
     @Test
-    public void shouldAddProductToShoppingCart() throws productNotAvailableException {
+    public void shouldAddProductToShoppingCart() throws ProductNotFoundException {
         customerService.addProductToShoppingCart("iphone Xr",phoneStore,2,customer);
         int customersQueue = phoneStore.getCustomersToAttend().size();
         assertEquals(1, customersQueue);
@@ -44,7 +44,7 @@ public class CustomerServiceTest {
     }
     @Test
     public void productOutOfQuantityException(){
-        assertThrows(productNotAvailableException.class,
+        assertThrows(ProductNotFoundException.class,
                 ()-> customerService.addProductToShoppingCart(" ",phoneStore,1, customer));
     }
 

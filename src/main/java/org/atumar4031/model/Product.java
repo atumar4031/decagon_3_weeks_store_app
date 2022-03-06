@@ -1,7 +1,7 @@
 package org.atumar4031.model;
 
-import org.atumar4031.constants.Category;
-import org.atumar4031.exceptions.EmptyInputException;
+import org.atumar4031.enums.Category;
+import org.atumar4031.exceptions.InvalidInputException;
 
 public class Product {
     private int productId;
@@ -43,38 +43,38 @@ public class Product {
         return productId;
     }
 
-    public void setProductId(int productId) throws EmptyInputException {
+    public void setProductId(int productId) throws InvalidInputException {
         if(productId > 0)
             this.productId = productId;
-        else throw new EmptyInputException("Invalid input");
+        else throw new InvalidInputException("Invalid input");
     }
 
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName(String productName) throws EmptyInputException {
+    public void setProductName(String productName) throws InvalidInputException {
         if(productName.length() >= 3) this.productName = productName;
-        else throw new EmptyInputException("Invalid input");
+        else throw new InvalidInputException("Invalid input");
     }
     public double getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(double productPrice) throws EmptyInputException {
+    public void setProductPrice(double productPrice) throws InvalidInputException {
         if(productPrice > 0.00 )
              this.productPrice = productPrice;
-        else throw new EmptyInputException("Invalid input");
+        else throw new InvalidInputException("Invalid input");
     }
     public Category getProductCategory() {
         return productCategory;
     }
 
-    public void setProductCategory(Category productCategory) throws EmptyInputException {
+    public void setProductCategory(Category productCategory) throws InvalidInputException {
         if(productCategory != null)
             this.productCategory = productCategory;
         else
-            throw new EmptyInputException("Invalid input");
+            throw new InvalidInputException("Invalid input");
     }
 
 

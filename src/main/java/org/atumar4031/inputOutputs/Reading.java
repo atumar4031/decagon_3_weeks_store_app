@@ -3,8 +3,8 @@ package org.atumar4031.inputOutputs;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.atumar4031.constants.Category;
-import org.atumar4031.exceptions.EmptyInputException;
+import org.atumar4031.enums.Category;
+import org.atumar4031.exceptions.InvalidInputException;
 import org.atumar4031.model.Product;
 
 import java.io.FileInputStream;
@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class Reading {
 
-    public static Product[] readProductFromExcel() throws IOException, EmptyInputException {
-        String path = "src/main/java/org/atumar4031/constants/phoneStore.xlsx";
+    public static Product[] readProductFromExcel() throws IOException, InvalidInputException {
+        String path = "src/main/java/org/atumar4031/files/phoneStore.xlsx";
 
         FileInputStream inputStream = new FileInputStream(path);
         XSSFWorkbook workbook = new XSSFWorkbook(inputStream);

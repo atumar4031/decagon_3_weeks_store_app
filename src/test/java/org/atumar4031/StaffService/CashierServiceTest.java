@@ -1,9 +1,9 @@
 package org.atumar4031.StaffService;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Category;
-import org.atumar4031.constants.Gender;
-import org.atumar4031.constants.Role;
+import org.atumar4031.enums.Category;
+import org.atumar4031.enums.Gender;
+import org.atumar4031.enums.Role;
 import org.atumar4031.exceptions.*;
 import org.atumar4031.model.*;
 import org.atumar4031.services.staff.CashierStaff;
@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.*;
@@ -45,7 +46,7 @@ public class CashierServiceTest {
 
     @Test
     public void toCheckIfProductIsAddedToStore()
-            throws NullProductException, EmptyInputException, AutorizationException, IOException {
+            throws InvalidInputException, InvalidInputException, StaffNotAuthorizedException, IOException {
         cashierService.addProductToStore(staffUmar, iphone13Pro, 2, PhoneStore);
         Product InsertedProduct = PhoneStore.getProducts()[PhoneStore.getProducts().length - 1];
 
@@ -54,24 +55,23 @@ public class CashierServiceTest {
 
     @Test
     public void shouldCheckIfUserIsAuthorized() {
-        assertThrows(AutorizationException.class, () ->  cashierService.addProductToStore(staffUsman, iphone13Pro, 2, PhoneStore));
+        assertThrows(StaffNotAuthorizedException.class, () ->  cashierService.addProductToStore(staffUsman, iphone13Pro, 2, PhoneStore));
     }
 
     @Test
-    public void removeProductIfAvailableInTheStore() throws NullProductException, EmptyInputException, AutorizationException, IOException {
+    public void removeProductIfAvailableInTheStore() throws InvalidInputException, InvalidInputException, StaffNotAuthorizedException, IOException {
         cashierService.addProductToStore(staffUmar, iphone13Pro, 2, PhoneStore);
-       assertThrows(ProductNotFoundException.class, () ->  cashierService.removeProduct(iphone13Pro.getProductId(), PhoneStore));
+       assertThrows(ProductNotFoundException.class, () ->  cashierService.removeProduct(staffUmar,iphone13Pro.getProductId(), PhoneStore));
    }
 
    @Test
-    public void isProductRestocked() throws NullProductException, EmptyInputException, AutorizationException, IOException {
-        boolean restock = cashierService.restockProduct(iphoneXr, 10, PhoneStore);
+    public void isProductRestocked() throws InvalidInputException, StaffNotAuthorizedException {
+        boolean restock = cashierService.restockProduct(staffUmar,iphoneXr, 10, PhoneStore);
         assertTrue(restock);
     }
 
     @Test
-    public void sellProducts() throws EmptyInputException, NoSuchQuantityAvailabe, productNotAvailableException, EmptyShoppingCartException, StaffNotAuthorizedException, InsufficientFundException, IOException {
-
+    public void sellProducts() throws InvalidInputException, NoSuchQuantityAvailabe, ProductNotFoundException, EmptyShoppingCartException, InsufficientFundException, IOException {
         customerService.addProductToShoppingCart(iphoneXr.getProductName(), PhoneStore, 2, customer);
         Product[] products = PhoneStore.getProducts();
         double StoreAccountBalanceBefore = PhoneStore.getStoreAccount();

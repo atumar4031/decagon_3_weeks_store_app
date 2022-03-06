@@ -2,12 +2,13 @@ package org.atumar4031.services.applicant;
 
 import org.atumar4031.Store;
 import org.atumar4031.exceptions.ApplicantAlreadyExistException;
-import org.atumar4031.exceptions.InvalidEmailException;
+import org.atumar4031.exceptions.InvalidInputException;
 import org.atumar4031.model.Applicant;
 
 public class ApplicantServiceImpl implements applicantService {
+    //TODO : test in junit and main
     @Override
-    public void apply(Applicant applicant, Store store) throws ApplicantAlreadyExistException, InvalidEmailException {
+    public void apply(Applicant applicant, Store store){
 
             if (validateEmail(applicant.getEmail())) {
                 if (!store.getApplicants().contains(applicant)){
@@ -16,7 +17,7 @@ public class ApplicantServiceImpl implements applicantService {
                     throw new ApplicantAlreadyExistException("This applicant already exist");
                 }
             } else
-                throw new InvalidEmailException("Email not valid");
+                throw new InvalidInputException("Email not valid");
 
     }
     public boolean validateEmail(String email){

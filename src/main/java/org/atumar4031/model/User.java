@@ -1,6 +1,6 @@
 package org.atumar4031.model;
 
-import org.atumar4031.constants.Gender;
+import org.atumar4031.enums.Gender;
 
 public abstract class User {
     private String name;
@@ -8,7 +8,6 @@ public abstract class User {
     private String phone;
     private String address;
     private Gender gender;
-    private int age;
 
     public User(String name, String email, String phone, Gender gender, String address) {
 
@@ -17,7 +16,6 @@ public abstract class User {
         this.phone = phone;
         this.address = address;
         this.gender = gender;
-        this.age= age;
     }
 
     protected User() {
@@ -58,21 +56,14 @@ public abstract class User {
         this.gender = gender;
     }
 
-    public int getAge() {
-        return age;
-    }
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     @Override
     public String toString() {
-        return "User{" +
+        return " User{" +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", gender= " + gender +
-                ", age= " + age +" "+
                 ", address='" + address + '\'' +
                 '}';
     }

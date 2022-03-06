@@ -1,9 +1,9 @@
 package org.atumar4031.services.applicant;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Gender;
+import org.atumar4031.enums.Gender;
 import org.atumar4031.exceptions.ApplicantAlreadyExistException;
-import org.atumar4031.exceptions.InvalidEmailException;
+import org.atumar4031.exceptions.InvalidInputException;
 import org.atumar4031.model.Applicant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,31 +35,22 @@ class applicantServiceImplTest {
     }
 
     @Test
-    void apply() throws ApplicantAlreadyExistException, InvalidEmailException {
+    void apply() throws ApplicantAlreadyExistException, InvalidInputException {
 
-        //given
         int expected = 1;
         applicantService.apply(Ahmad, phoneStore);
-        //when
         assertEquals(expected, phoneStore.getApplicants().size());
 
     }
     @Test
-    public void checkMultipleApplications() throws ApplicantAlreadyExistException, InvalidEmailException {
-        //then
-
-        applicantService.apply(Fatima,phoneStore);  //InvalidEmailException
-        //when
+    public void checkMultipleApplications() throws ApplicantAlreadyExistException, InvalidInputException {
+        applicantService.apply(Fatima,phoneStore);
         assertThrows(ApplicantAlreadyExistException.class, ()->applicantService.apply(Fatima,phoneStore));
-        //then
     }
 
     @Test
-    public void validateEmailException() throws ApplicantAlreadyExistException, InvalidEmailException {
-        //then
+    public void validateEmailException() throws ApplicantAlreadyExistException, InvalidInputException {
         Fatima.setEmail("fatima.gmail.com");
-        //when
-        assertThrows(InvalidEmailException.class, ()->applicantService.apply(Fatima,phoneStore));
-        //then
+        assertThrows(InvalidInputException.class, ()->applicantService.apply(Fatima,phoneStore));
     }
 }

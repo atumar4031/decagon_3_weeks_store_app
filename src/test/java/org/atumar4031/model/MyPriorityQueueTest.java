@@ -1,18 +1,15 @@
 package org.atumar4031.model;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Gender;
-import org.atumar4031.constants.Role;
-import org.atumar4031.exceptions.productNotAvailableException;
+import org.atumar4031.enums.Gender;
+import org.atumar4031.enums.Role;
+import org.atumar4031.exceptions.ProductNotFoundException;
 import org.atumar4031.services.customer.CustomerServiceImple;
-import org.atumar4031.services.staff.CashierStaff;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class MyPriorityQueueTest {
     Store phoneStore;
@@ -38,10 +35,11 @@ class MyPriorityQueueTest {
     @Before
 
     @Test
-    void tocheckIfTheCustomerWithLowerQuantityIsAddedBeforeCustomerWithHightQuantity() throws productNotAvailableException {
+    void tocheckIfTheCustomerWithLowerQuantityIsAddedBeforeCustomerWithHightQuantity() throws ProductNotFoundException {
         customerService.addProductToShoppingCart("Nokia", phoneStore,2, bala);
         customerService.addProductToShoppingCart("Nokia", phoneStore,3, kamal);
         customerService.addProductToShoppingCart("iphone Xr", phoneStore,4, musa);
+
     }
 
     @Test

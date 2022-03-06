@@ -1,11 +1,11 @@
 package org.atumar4031.StaffService;
 
 import org.atumar4031.Store;
-import org.atumar4031.constants.Gender;
-import org.atumar4031.constants.Role;
-import org.atumar4031.exceptions.CashierNotFoundException;
-import org.atumar4031.exceptions.MinimalRequarimentException;
+import org.atumar4031.enums.Gender;
+import org.atumar4031.enums.Role;
+import org.atumar4031.exceptions.ApplicantMinimalRequarimentException;
 import org.atumar4031.exceptions.StaffAlreadyExistException;
+import org.atumar4031.exceptions.StaffNotAuthorizedException;
 import org.atumar4031.model.Applicant;
 import org.atumar4031.model.Staff;
 import org.atumar4031.services.staff.ManagerStaff;
@@ -17,84 +17,64 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class ManagerServicesTest {
-
+    // TODO refactor and reduce exception;
     private ManagerStaff managerServices;
-    private Staff StaffManager;
+    private Staff usmanManager;
     private List<Applicant> applicantList;
-    private List<Applicant> requirementChecker;
     private Applicant Abubakar;
     private Applicant samira;
-    private Applicant umar;
+    private Applicant asmau;
     Store store;
 
     @Before
     public void setUp() throws Exception {
 
-        StaffManager = new Staff("10101","usman","usman@gmail.com","0000999888","", Role.MANAGER, Gender.MALE,21);
+        usmanManager = new Staff("10101","usman","usman@gmail.com","0000999888","", Role.MANAGER, Gender.MALE,21);
+//        umarManager = new Staff("10102","umar","umar@gmail.com","0000999888","", Role.MANAGER, Gender.MALE,21);
         store = new Store(101, "phoneStore");
         managerServices = new ManagerStaff();
-        applicantList = new ArrayList<>();
-        requirementChecker = new ArrayList<>();
+//        applicantList = new ArrayList<>();
         Abubakar = new Applicant("Umar","umar@gmail.com",
                 "08166666666","Yar  yara",
                 "MSc",30, Gender.MALE, 2);
-        samira = new Applicant("Asmau","asmau@gmail.com",
+        samira = new Applicant("Samira","samira@gmail.com",
                 "08166616752","T wada",
                 "MSC",30,Gender.FEMALE, 2);
-        umar = new Applicant("Asmau","asmau@gmail.com",
+        asmau = new Applicant("Asmau","asmau@gmail.com",
                 "08166616752","T wada",
-                "sc",30,Gender.FEMALE, 2);
-        applicantList.add(Abubakar);
-        applicantList.add(samira);
-        requirementChecker.add(umar);
+                "Bsc",30,Gender.FEMALE, 2);
+//        store.getApplicants().add(Abubakar);
+        store.getApplicants().add(samira);
+        store.getApplicants().add(asmau);
+        store.getStaffList().add(usmanManager);
     }
 
     @Test
-    public void compareSizeOfListBeforeAndAfterHire() throws StaffAlreadyExistException, MinimalRequarimentException {
-        //given
+    public void compareSizeOfListBeforeAndAfterHire() throws StaffAlreadyExistException, ApplicantMinimalRequarimentException {
         int sizeBeforeHire = store.getStaffList().size();
-        managerServices.hireCashier(applicantList,store, 2);
+        managerServices.hireCashier(usmanManager,store, samira,2);
         int sizeAfterHire = store.getStaffList().size();
-        //when
         assertTrue(sizeAfterHire > sizeBeforeHire);
-        //then
     }
 
     @Test
-    public void checkAvailableVacancyAfterHired() throws StaffAlreadyExistException, MinimalRequarimentException {
-        //given
-        int vacancies = 2;
-        managerServices.hireCashier(applicantList,store, vacancies);
-        //when
-//        assertTrue(managerServiceImple.getAvailableSlot() < vacancies);
-        //then
-    }
+    public void shouldEnsureStaffIsAuthorisedTodoThisOperation() throws  StaffAlreadyExistException, ApplicantMinimalRequarimentException, StaffNotAuthorizedException {
 
-    // testing Fire method
-    @Test
-    public void shouldCheckIfCashierExistBeforeFired() throws CashierNotFoundException, StaffAlreadyExistException, MinimalRequarimentException {
-        //given
-        managerServices.hireCashier(applicantList,store, 2);
-        int beforeRemove = store.getStaffList().size();
-        managerServices.fireCashier("umar@gmail.com", store);
-
+        assertThrows(StaffNotAuthorizedException.class,
+                ()->managerServices.fireCashier(usmanManager,"umar@gmail.com", store));
     }
 
     @Test
-    public void shouldCheckforCashierNotFoundExceptionWhileFiring() throws CashierNotFoundException, StaffAlreadyExistException, MinimalRequarimentException {
-        //given
-        managerServices.hireCashier(applicantList,store, 2);
-//        managerService.getCashiers();
-        assertThrows(CashierNotFoundException.class,
-                () -> managerServices.fireCashier("asmau@gmail.com",store));
+    public void shouldCheckForCashierNotFoundExceptionWhileFiring() throws StaffNotAuthorizedException, StaffAlreadyExistException, ApplicantMinimalRequarimentException {
+        managerServices.hireCashier(usmanManager,store,Abubakar, 2);
+        assertThrows(StaffNotAuthorizedException.class,
+                () -> managerServices.fireCashier(usmanManager,"asmau@gmail.com",store));
     }
 
     @Test
-    public void chechForMinimalRequirement() throws CashierNotFoundException, StaffAlreadyExistException, MinimalRequarimentException {
-        //given
-//        managerService.getCashiers();
-        assertThrows(MinimalRequarimentException.class,
-                () -> managerServices.hireCashier(requirementChecker,store, 2));
+    public void checkForMinimalRequirement() throws StaffAlreadyExistException, ApplicantMinimalRequarimentException {
+        assertThrows(ApplicantMinimalRequarimentException.class,
+                () -> managerServices.hireCashier(usmanManager,store,asmau, 2));
     }
 
 }

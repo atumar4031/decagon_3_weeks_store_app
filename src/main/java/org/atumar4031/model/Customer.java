@@ -1,6 +1,6 @@
 package org.atumar4031.model;
 
-import org.atumar4031.constants.Gender;
+import org.atumar4031.enums.Gender;
 
 
 public class Customer extends User  {
